@@ -20,20 +20,20 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @NotBlank(message = "First name is mandatory")
-    @Column(name = "first_name")
+//    @NotBlank(message = "First name is mandatory")
+//    @Column(name = "first_name")
     private String firstName;
 
-    @NotBlank(message = "Last name is mandatory")
-    @Column(name = "last_name")
+//    @NotBlank(message = "Last name is mandatory")
+//    @Column(name = "last_name")
     private String lastName;
 
-    @NotBlank(message = "Login is mandatory")
-    @Size(min = 6, max = 32, message = "Login must be between 6 and 32 characters")
+//    @NotBlank(message = "Login is mandatory")
+//    @Size(min = 6, max = 32, message = "Login must be between 6 and 32 characters")
     private String login;
 
-    @NotBlank(message = "Email is mandatory")
-    @Email(message = "Email should be valid")
+//    @NotBlank(message = "Email is mandatory")
+//    @Email(message = "Email should be valid")
     private String email;
 
     public User(String firstName, String lastName, String login, String email) {
