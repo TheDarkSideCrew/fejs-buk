@@ -5,7 +5,6 @@ import com.the.dark.side.crew.fejsbuk.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -13,8 +12,8 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public List<User> getUsers() {
-        return this.userRepository.findAll();
+    public User getUser(long id) {
+        return userRepository.findById(id).orElse(null);
     }
 
     public User addUser(User user) {
