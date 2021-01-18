@@ -3,7 +3,6 @@ package com.the.dark.side.crew.fejsbuk.model;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import javax.persistence.*;
 
 @Entity
@@ -11,7 +10,7 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @Table(name = "users")
-public class User {
+public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +26,7 @@ public class User {
 
     private String email;
 
-    public User(String firstName, String lastName, String login, String email) {
+    public UserEntity(String firstName, String lastName, String login, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.login = login;
