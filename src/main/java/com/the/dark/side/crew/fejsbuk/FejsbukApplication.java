@@ -9,5 +9,4 @@ public class FejsbukApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(FejsbukApplication.class, args);
 	}
-
 }
