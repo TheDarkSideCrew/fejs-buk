@@ -28,7 +28,7 @@ public class PostMapper {
         return PostDto.builder()
                 .id(postEntity.getId())
                 .message(postEntity.getMessage())
-                .localDateTime(postEntity.getCreatedAt())
+                .createdAt(postEntity.getCreatedAt())
                 .userId(postEntity.getUserEntity().getId())
                 .build();
     }

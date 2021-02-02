@@ -15,7 +15,7 @@ public class PostDto {
 
     private String message;
 
-    private LocalDateTime localDateTime;
+    private LocalDateTime createdAt;
 
     private long userId;
 }

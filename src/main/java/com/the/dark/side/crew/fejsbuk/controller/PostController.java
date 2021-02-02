@@ -1,9 +1,9 @@
 package com.the.dark.side.crew.fejsbuk.controller;
 
 
-import com.the.dark.side.crew.fejsbuk.model.PostEntity;
+import com.the.dark.side.crew.fejsbuk.mapper.PostMapper;
 import com.the.dark.side.crew.fejsbuk.model.dto.PostDto;
-import com.the.dark.side.crew.fejsbuk.service.PostService;
+import com.the.dark.side.crew.fejsbuk.service.impl.PostServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +15,8 @@ import java.util.List;
 @RequestMapping("/posts")
 public class PostController {
 
-    private final PostService postService;
+    private final PostServiceImpl postService;
+    private final PostMapper postMapper;
 
     @GetMapping
     public List<PostDto> getAllPosts(@RequestParam long userId) {
@@ -23,7 +24,7 @@ public class PostController {
     }
 
     @PostMapping
-    public ResponseEntity<PostEntity> addPost(@RequestBody PostDto postDto) {
-        return ResponseEntity.ok(postService.addPost(postDto));
+    public ResponseEntity<PostDto> addPost(@RequestBody PostDto postDto) {
+        return ResponseEntity.ok(postMapper.toDto(postService.addPost(postDto)));
     }
 }

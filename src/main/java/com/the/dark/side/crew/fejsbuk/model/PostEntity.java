@@ -25,7 +25,13 @@ public class PostEntity {
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private UserEntity userEntity;
+
+    public PostEntity(String message, LocalDateTime createdAt, UserEntity userEntity) {
+        this.message = message;
+        this.createdAt = createdAt;
+        this.userEntity = userEntity;
+    }
 }
 
