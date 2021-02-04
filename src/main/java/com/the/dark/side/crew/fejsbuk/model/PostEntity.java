@@ -1,7 +1,6 @@
 package com.the.dark.side.crew.fejsbuk.model;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -11,7 +10,6 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
 @Table(name = "posts")
 public class PostEntity {
 
@@ -27,11 +25,5 @@ public class PostEntity {
 
     @ManyToOne
     private UserEntity userEntity;
-
-    public PostEntity(String message, LocalDateTime createdAt, UserEntity userEntity) {
-        this.message = message;
-        this.createdAt = createdAt;
-        this.userEntity = userEntity;
-    }
 }
 

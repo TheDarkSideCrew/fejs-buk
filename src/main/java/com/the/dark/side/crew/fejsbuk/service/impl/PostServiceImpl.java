@@ -23,8 +23,9 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostEntity addPost(PostDto postDto) {
+    public PostDto addPost(PostDto postDto) {
         PostEntity postEntity = postMapper.toEntity(postDto);
-        return postRepository.save(postEntity);
+        postRepository.save(postEntity);
+        return postMapper.toDto(postEntity);
     }
 }
