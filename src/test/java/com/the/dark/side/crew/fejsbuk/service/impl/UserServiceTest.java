@@ -28,7 +28,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void whenUserIdFoundThenReturnUser() {
+    void whenUserFoundThenReturnUser() {
         long userId = 1L;
         UserEntity userEntity = mock(UserEntity.class);
 
@@ -40,7 +40,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void whenUserIdNotFindThenReturn404() {
+    void whenUserNotFoundThenEmpty() {
         long userId = 1L;
 
         when(userRepository.findById(userId)).thenReturn(Optional.empty());

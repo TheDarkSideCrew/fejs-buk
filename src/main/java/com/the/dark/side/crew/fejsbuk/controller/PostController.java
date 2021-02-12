@@ -17,8 +17,13 @@ public class PostController {
     private final PostService postService;
 
     @GetMapping
-    public List<PostDto> getAllPosts(@RequestParam long userId) {
-        return postService.getAllPosts(userId);
+    public List<PostDto> getAllUserIdPosts(@RequestParam long userId) {
+        return postService.getAllUserIdPosts(userId);
+    }
+
+    @GetMapping("/all")
+    public List<PostDto> getAllPosts() {
+        return postService.getAllPosts();
     }
 
     @PostMapping

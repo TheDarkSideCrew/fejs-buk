@@ -10,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -32,25 +33,38 @@ public class PostServiceTest {
     }
 
     @Test
-    void whenUserFoundThanReturnAllPosts() {
+    void whenUserFoundThenReturnAllPosts() {
         long userId = 1L;
         PostDto postDto = mock(PostDto.class);
 
-        when(postMapper.toDtos(postRepository.findByUserEntityId(userId))).thenReturn(List.of(postDto));
+        when(postMapper.toDtos(postRepository.findByUserEntityId(userId)))
+                .thenReturn(Collections.singletonList(postDto));
 
-        List<PostDto> result = postService.getAllPosts(userId);
+        List<PostDto> result = postService.getAllUserIdPosts(userId);
         assertEquals(1, result.size());
         assertEquals(postDto, result.get(0));
     }
 
     @Test
-    void whenUserNotFoundThanReturnEmptyList() {
+    void whenUserNotFoundThenReturnEmptyList() {
         long userId = 1L;
 
-        when(postMapper.toDtos(postRepository.findByUserEntityId(userId))).thenReturn(List.of());
+        when(postMapper.toDtos(postRepository.findByUserEntityId(userId))).thenReturn(Collections.emptyList());
 
-        List<PostDto> result = postService.getAllPosts(userId);
+        List<PostDto> result = postService.getAllUserIdPosts(userId);
         assertEquals(0, result.size());
+    }
+
+    @Test
+    void shouldGetAllPosts() {
+        PostDto postDto = mock(PostDto.class);
+
+        when(postMapper.toDtos(postRepository.findAll()))
+                .thenReturn(Collections.singletonList(postDto));
+
+        List<PostDto> result = postService.getAllPosts();
+        assertEquals(1, result.size());
+        assertEquals(postDto, result.get(0));
     }
 
     @Test
@@ -63,6 +77,7 @@ public class PostServiceTest {
         when(postMapper.toDto(postEntity)).thenReturn(postDto);
 
         PostDto result = postService.addPost(postDto);
+        verify(postRepository).save(postEntity);
         assertEquals(result, postDto);
     }
 }

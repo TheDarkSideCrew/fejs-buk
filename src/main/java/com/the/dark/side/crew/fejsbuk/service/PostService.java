@@ -6,7 +6,9 @@ import java.util.List;
 
 public interface PostService {
 
-    List<PostDto> getAllPosts(long userId);
+    List<PostDto> getAllUserIdPosts(long userId);
+
+    List<PostDto> getAllPosts();
 
     PostDto addPost(PostDto postDto);
 }

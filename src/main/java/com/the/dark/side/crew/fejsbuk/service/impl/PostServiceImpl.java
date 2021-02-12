@@ -18,8 +18,13 @@ public class PostServiceImpl implements PostService {
     private final PostMapper postMapper;
 
     @Override
-    public List<PostDto> getAllPosts(long userId) {
-        return postMapper.toDtos(postRepository.findByUserEntityId(userId));
+    public List<PostDto> getAllUserIdPosts(long userId) {
+        return  postMapper.toDtos(postRepository.findByUserEntityId(userId));
+    }
+
+    @Override
+    public List<PostDto> getAllPosts() {
+        return postMapper.toDtos(postRepository.findAll());
     }
 
     @Override
