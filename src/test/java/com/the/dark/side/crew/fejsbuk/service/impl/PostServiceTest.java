@@ -43,7 +43,7 @@ public class PostServiceTest {
 
         when(postRepository.findByUserEntityId(userId))
                 .thenReturn(List.of(postEntity));
-        when(postMapper.toDtos(postRepository.findByUserEntityId(userId)))
+        when(postMapper.toDtos(List.of(postEntity)))
                 .thenReturn(Collections.singletonList(postDto));
         when(userEntity.getId()).thenReturn(userId);
 
@@ -57,8 +57,8 @@ public class PostServiceTest {
         long userId = 2L;
 
         when(postRepository.findByUserEntityId(userId))
-                .thenReturn(List.of());
-        when(postMapper.toDtos(postRepository.findByUserEntityId(userId)))
+                .thenReturn(Collections.emptyList());
+        when(postMapper.toDtos(Collections.emptyList()))
                 .thenReturn(Collections.emptyList());
 
         List<PostDto> result = postService.getAllUserIdPosts(userId);
@@ -68,9 +68,11 @@ public class PostServiceTest {
     @Test
     void shouldGetAllPosts() {
         PostDto postDto = mock(PostDto.class);
+        PostEntity postEntity = mock(PostEntity.class);
 
-        when(postMapper.toDtos(postRepository.findAll()))
-                .thenReturn(Collections.singletonList(postDto));
+        when(postRepository.findAll()).thenReturn(List.of(postEntity));
+        when(postMapper.toDtos(List.of(postEntity)))
+                .thenReturn(List.of(postDto));
 
         List<PostDto> result = postService.getAllPosts();
         assertEquals(1, result.size());
