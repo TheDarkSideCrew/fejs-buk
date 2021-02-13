@@ -21,7 +21,7 @@ public class PostController {
         return postService.getAllUserIdPosts(userId);
     }
 
-    @GetMapping("/all")
+    @GetMapping("/")
     public List<PostDto> getAllPosts() {
         return postService.getAllPosts();
     }

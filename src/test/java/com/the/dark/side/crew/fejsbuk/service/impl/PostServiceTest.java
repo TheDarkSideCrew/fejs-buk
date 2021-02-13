@@ -2,6 +2,7 @@ package com.the.dark.side.crew.fejsbuk.service.impl;
 
 import com.the.dark.side.crew.fejsbuk.mapper.PostMapper;
 import com.the.dark.side.crew.fejsbuk.model.PostEntity;
+import com.the.dark.side.crew.fejsbuk.model.UserEntity;
 import com.the.dark.side.crew.fejsbuk.model.dto.PostDto;
 import com.the.dark.side.crew.fejsbuk.repository.PostRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +15,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 public class PostServiceTest {
@@ -34,11 +36,16 @@ public class PostServiceTest {
 
     @Test
     void whenUserFoundThenReturnAllPosts() {
-        long userId = 1L;
+        long userId = 2L;
         PostDto postDto = mock(PostDto.class);
+        PostEntity postEntity = mock(PostEntity.class);
+        UserEntity userEntity = mock(UserEntity.class);
 
+        when(postRepository.findByUserEntityId(userId))
+                .thenReturn(List.of(postEntity));
         when(postMapper.toDtos(postRepository.findByUserEntityId(userId)))
                 .thenReturn(Collections.singletonList(postDto));
+        when(userEntity.getId()).thenReturn(userId);
 
         List<PostDto> result = postService.getAllUserIdPosts(userId);
         assertEquals(1, result.size());
@@ -47,12 +54,15 @@ public class PostServiceTest {
 
     @Test
     void whenUserNotFoundThenReturnEmptyList() {
-        long userId = 1L;
+        long userId = 2L;
 
-        when(postMapper.toDtos(postRepository.findByUserEntityId(userId))).thenReturn(Collections.emptyList());
+        when(postRepository.findByUserEntityId(userId))
+                .thenReturn(List.of());
+        when(postMapper.toDtos(postRepository.findByUserEntityId(userId)))
+                .thenReturn(Collections.emptyList());
 
         List<PostDto> result = postService.getAllUserIdPosts(userId);
-        assertEquals(0, result.size());
+        assertTrue(result.isEmpty());
     }
 
     @Test
@@ -73,7 +83,6 @@ public class PostServiceTest {
         PostEntity postEntity = mock(PostEntity.class);
 
         when(postMapper.toEntity(postDto)).thenReturn(postEntity);
-        when(postRepository.save(postEntity)).thenReturn(postEntity);
         when(postMapper.toDto(postEntity)).thenReturn(postDto);
 
         PostDto result = postService.addPost(postDto);
