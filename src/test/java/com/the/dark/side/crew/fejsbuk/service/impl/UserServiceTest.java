@@ -28,29 +28,33 @@ class UserServiceImplTest {
     }
 
     @Test
-    void shouldReturnUser() {
-        // given
+    void whenUserFoundThenReturnUser() {
         long userId = 1L;
         UserEntity userEntity = mock(UserEntity.class);
 
-        //when
         when(userRepository.findById(userId)).thenReturn(Optional.of(userEntity));
 
-        //then
         Optional<UserEntity> result = userService.getUser(userId);
         assertTrue(result.isPresent());
         assertEquals(userEntity, result.get());
     }
 
     @Test
+    void whenUserNotFoundThenEmpty() {
+        long userId = 1L;
+
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+
+        Optional<UserEntity> result = userService.getUser(userId);
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
     void shouldAddUser() {
-        //given
         UserEntity user = mock(UserEntity.class);
 
-        //when
         when(userRepository.save(user)).thenReturn(user);
 
-        //then
         UserEntity userEntity = userService.addUser(user);
         verify(userRepository).save(user);
         assertEquals(userEntity, user);
