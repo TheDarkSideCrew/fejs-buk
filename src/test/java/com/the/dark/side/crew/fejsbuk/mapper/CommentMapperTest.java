@@ -38,7 +38,7 @@ class CommentMapperTest {
     }
 
     @Test
-    void whenCallToDtosThenReturnListOfDtos() {
+    void whenToDtosThenReturnListOfDtos() {
         CommentMapper mapper = spy(new CommentMapper(userRepository, postRepository));
         CommentDto commentDto = mock(CommentDto.class);
         CommentEntity commentEntity = mock(CommentEntity.class);
@@ -51,7 +51,7 @@ class CommentMapperTest {
     }
 
     @Test
-    void whenCallToDtoThenReturnPostDto() {
+    void whenToDtoThenReturnPostDto() {
         CommentEntity commentEntity = mock(CommentEntity.class);
         PostEntity postEntity = mock(PostEntity.class);
         UserEntity userEntity = mock(UserEntity.class);
@@ -96,8 +96,9 @@ class CommentMapperTest {
 
         CommentEntity result = commentMapper.toEntity(commentDto);
         assertEquals(message, result.getMessage());
-        assertEquals(userId, result.getUserEntity().getId());
-        assertEquals(postId, result.getPostEntity().getId());
+        assertEquals(userEntity, result.getUserEntity());
+        assertEquals(postEntity, result.getPostEntity());
+
     }
 
     @Test
