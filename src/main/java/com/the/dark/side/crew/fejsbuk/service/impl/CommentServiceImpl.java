@@ -18,7 +18,7 @@ public class CommentServiceImpl implements CommentService {
     private final CommentMapper commentMapper;
 
     @Override
-    public List<CommentDto> getAllPostIdComments(long postId) {
+    public List<CommentDto> getComments(long postId) {
         return commentMapper.toDtos(commentRepository.findByPostEntityId(postId));
     }
 

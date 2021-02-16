@@ -44,10 +44,10 @@ class CommentServiceImplTest {
         when(commentRepository.findByPostEntityId(postId))
                 .thenReturn(List.of(commentEntity));
         when(commentMapper.toDtos(List.of(commentEntity)))
-                .thenReturn(Collections.singletonList(commentDto));
+                .thenReturn(List.of(commentDto));
         when(postEntity.getId()).thenReturn(postId);
 
-        List<CommentDto> result = commentService.getAllPostIdComments(postId);
+        List<CommentDto> result = commentService.getComments(postId);
         assertEquals(1, result.size());
         assertEquals(commentDto, result.get(0));
     }
@@ -61,7 +61,7 @@ class CommentServiceImplTest {
         when(commentMapper.toDtos(Collections.emptyList()))
                 .thenReturn(Collections.emptyList());
 
-        List<CommentDto> result = commentService.getAllPostIdComments(postId);
+        List<CommentDto> result = commentService.getComments(postId);
         assertTrue(result.isEmpty());
     }
 

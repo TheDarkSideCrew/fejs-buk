@@ -16,8 +16,8 @@ public class CommentController {
     private final CommentService commentService;
 
     @GetMapping
-    public List<CommentDto> getAllPostIdComments(@RequestParam long postId) {
-        return commentService.getAllPostIdComments(postId);
+    public List<CommentDto> getComments(@RequestParam long postId) {
+        return commentService.getComments(postId);
     }
 
     @PostMapping
