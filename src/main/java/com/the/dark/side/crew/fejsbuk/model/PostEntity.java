@@ -6,6 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -25,5 +26,11 @@ public class PostEntity {
 
     @ManyToOne
     private UserEntity userEntity;
-}
 
+    @ManyToMany
+    @JoinTable(
+            name = "posts_likes",
+            joinColumns = @JoinColumn(name = "posts_id"),
+            inverseJoinColumns = @JoinColumn(name = "users_id"))
+    private Set<UserEntity> likes;
+}
