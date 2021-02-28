@@ -1,10 +1,11 @@
 package com.the.dark.side.crew.fejsbuk.service;
 
-import java.util.Map;
+
+import com.the.dark.side.crew.fejsbuk.model.dto.PostDto;
 
 public interface LikeService {
 
-    String addLike(long postId, long userId);
+    PostDto addLike(long postId, long userId);
 
-    Map<String, Integer> countLikes(long postId);
+    Integer countLikes(long postId);
 }

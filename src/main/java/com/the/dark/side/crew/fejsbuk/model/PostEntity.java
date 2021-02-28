@@ -27,7 +27,7 @@ public class PostEntity {
     @ManyToOne
     private UserEntity userEntity;
 
-    @ManyToMany
+    @OneToMany
     @JoinTable(
             name = "posts_likes",
             joinColumns = @JoinColumn(name = "posts_id"),
