@@ -1,11 +1,13 @@
 package com.the.dark.side.crew.fejsbuk.service;
 
 
-import com.the.dark.side.crew.fejsbuk.model.dto.PostDto;
+import com.the.dark.side.crew.fejsbuk.model.dto.LikeDto;
 
 public interface LikeService {
 
-    PostDto addLike(long postId, long userId);
+    LikeDto addLike(LikeDto likeDto);
 
-    Integer countLikes(long postId);
+    void removeLike(long likeId);
+
+    Long countLikes(long postId);
 }

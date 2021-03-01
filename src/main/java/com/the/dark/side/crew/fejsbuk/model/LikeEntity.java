@@ -10,14 +10,12 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@Table(name = "posts")
-public class PostEntity {
+@Table(name = "likes")
+public class LikeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    private String message;
 
     @CreationTimestamp
     @Column(updatable = false)
@@ -25,4 +23,7 @@ public class PostEntity {
 
     @ManyToOne
     private UserEntity userEntity;
+
+    @ManyToOne
+    private PostEntity postEntity;
 }

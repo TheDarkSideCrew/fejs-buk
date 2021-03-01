@@ -1,11 +1,9 @@
 package com.the.dark.side.crew.fejsbuk.service.impl;
 
-import com.the.dark.side.crew.fejsbuk.mapper.PostMapper;
-import com.the.dark.side.crew.fejsbuk.model.PostEntity;
-import com.the.dark.side.crew.fejsbuk.model.UserEntity;
-import com.the.dark.side.crew.fejsbuk.model.dto.PostDto;
-import com.the.dark.side.crew.fejsbuk.repository.PostRepository;
-import com.the.dark.side.crew.fejsbuk.repository.UserRepository;
+import com.the.dark.side.crew.fejsbuk.mapper.LikeMapper;
+import com.the.dark.side.crew.fejsbuk.model.LikeEntity;
+import com.the.dark.side.crew.fejsbuk.model.dto.LikeDto;
+import com.the.dark.side.crew.fejsbuk.repository.LikeRepository;
 import com.the.dark.side.crew.fejsbuk.service.LikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,28 +15,27 @@ import org.springframework.web.server.ResponseStatusException;
 @RequiredArgsConstructor
 public class LikeServiceImpl implements LikeService {
 
-    private final PostMapper postMapper;
-    private final PostRepository postRepository;
-    private final UserRepository userRepository;
+    private final LikeRepository likeRepository;
+    private final LikeMapper likeMapper;
 
     @Override
-    public PostDto addLike(long postId, long userId) {
-        PostEntity postEntity = postRepository.findById(postId)
-                .orElseThrow(() -> new ResponseStatusException
-                        (HttpStatus.NOT_FOUND, "Post " + postId + " not found."));
-        UserEntity userEntity = userRepository.findById(userId)
-                .orElseThrow(() -> new ResponseStatusException
-                        (HttpStatus.NOT_FOUND, "User " + userId + " not found."));
-        postEntity.getLikes().add(userEntity);
-        postRepository.save(postEntity);
-        return postMapper.toDto(postEntity);
+    public LikeDto addLike(LikeDto likeDto) {
+        LikeEntity likeEntity = likeMapper.toEntity(likeDto);
+        if(likeRepository.existsByUserEntityAndPostEntity(likeEntity.getUserEntity(), likeEntity.getPostEntity())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Already liked.");
+        } else likeRepository.save(likeEntity);
+        return likeMapper.toDto(likeEntity);
     }
 
     @Override
-    public Integer countLikes(long postId) {
-        PostEntity postEntity = postRepository.findById(postId)
-                .orElseThrow(() -> new ResponseStatusException
-                        (HttpStatus.NOT_FOUND, "Post " + postId + " not found."));
-        return postEntity.getLikes().size();
+    public void removeLike(long likeId) {
+        if(likeRepository.existsById(likeId)) {
+            likeRepository.deleteById(likeId);
+        } else throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Like " + likeId + " does not exist.");
+    }
+
+    @Override
+    public Long countLikes(long postId) {
+        return likeRepository.countByPostEntityId(postId);
     }
 }

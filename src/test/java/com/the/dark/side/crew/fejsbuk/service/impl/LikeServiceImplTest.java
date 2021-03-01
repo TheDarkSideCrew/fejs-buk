@@ -1,11 +1,11 @@
 package com.the.dark.side.crew.fejsbuk.service.impl;
 
-import com.the.dark.side.crew.fejsbuk.mapper.PostMapper;
+import com.the.dark.side.crew.fejsbuk.mapper.LikeMapper;
+import com.the.dark.side.crew.fejsbuk.model.LikeEntity;
 import com.the.dark.side.crew.fejsbuk.model.PostEntity;
 import com.the.dark.side.crew.fejsbuk.model.UserEntity;
-import com.the.dark.side.crew.fejsbuk.model.dto.PostDto;
-import com.the.dark.side.crew.fejsbuk.repository.PostRepository;
-import com.the.dark.side.crew.fejsbuk.repository.UserRepository;
+import com.the.dark.side.crew.fejsbuk.model.dto.LikeDto;
+import com.the.dark.side.crew.fejsbuk.repository.LikeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -13,10 +13,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Optional;
-import java.util.Set;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 class LikeServiceImplTest {
@@ -25,13 +23,10 @@ class LikeServiceImplTest {
     private LikeServiceImpl likeService;
 
     @Mock
-    private PostRepository postRepository;
+    private LikeRepository likeRepository;
 
     @Mock
-    private UserRepository userRepository;
-
-    @Mock
-    private PostMapper postMapper;
+    private LikeMapper likeMapper;
 
     @BeforeEach
     void init() {
@@ -39,65 +34,68 @@ class LikeServiceImplTest {
     }
 
     @Test
-    void whenAddLikeReturnUser() {
-        long postId = 1L;
-        long userId = 1L;
-        PostEntity postEntity = mock(PostEntity.class);
-        UserEntity userEntity = mock(UserEntity.class);
-        PostDto postDto = mock(PostDto.class);
+    void shouldAddLike() {
+        LikeDto likeDto = mock(LikeDto.class);
+        LikeEntity likeEntity = mock(LikeEntity.class);
 
-        when(postRepository.findById(postId)).thenReturn(Optional.of(postEntity));
-        when(userRepository.findById(userId)).thenReturn(Optional.of(userEntity));
-        when(postMapper.toDto(postEntity)).thenReturn(postDto);
+        when(likeMapper.toEntity(likeDto)).thenReturn(likeEntity);
+        when(likeMapper.toDto(likeEntity)).thenReturn(likeDto);
 
-        PostDto result = likeService.addLike(postId, userId);
-        verify(postRepository).save(postEntity);
-        assertEquals(result, postDto);
+        LikeDto result = likeService.addLike(likeDto);
+        verify(likeRepository).save(likeEntity);
+        assertEquals(result, likeDto);
     }
 
     @Test
-    void whenPostNotFoundThenReturn404() {
-        long postId = 1L;
-        long userId = 1L;
+    void whenAlreadyLikedThen400() {
         PostEntity postEntity = mock(PostEntity.class);
+        UserEntity userEntity = mock(UserEntity.class);
+        LikeEntity likeEntity = mock(LikeEntity.class);
+        LikeDto likeDto = mock(LikeDto.class);
 
-        when(postEntity.getId()).thenReturn(postId);
-        when(postRepository.findById(postId)).thenReturn(Optional.empty());
+        when(likeEntity.getUserEntity()).thenReturn(userEntity);
+        when(likeEntity.getPostEntity()).thenReturn(postEntity);
+        when(likeMapper.toEntity(likeDto)).thenReturn(likeEntity);
+        when(likeRepository.existsByUserEntityAndPostEntity(userEntity, postEntity)).thenReturn(true);
 
         ResponseStatusException exception =
-                assertThrows(ResponseStatusException.class, () -> likeService.addLike(postId, userId));
-        assertEquals("404 NOT_FOUND \"Post 1 not found.\"", exception.getMessage());
+                assertThrows(ResponseStatusException.class, () -> likeService.addLike(likeDto));
+        assertEquals("400 BAD_REQUEST \"Already liked.\"", exception.getMessage());
     }
 
     @Test
-    void whenUserNotFoundThenReturn404() {
-        long postId = 1L;
-        long userId = 1L;
-        PostEntity postEntity = mock(PostEntity.class);
-        UserEntity userEntity = mock(UserEntity.class);
+    void shouldRemoveLike() {
+        long likeId = 1L;
+        LikeEntity likeEntity = mock(LikeEntity.class);
 
-        when(postEntity.getId()).thenReturn(postId);
-        when(userEntity.getId()).thenReturn(userId);
-        when(postRepository.findById(postId)).thenReturn(Optional.of(postEntity));
-        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+        when(likeEntity.getId()).thenReturn(likeId);
+
+        likeRepository.deleteById(likeEntity.getId());
+
+        verify(likeRepository).deleteById(likeId);
+    }
+
+    @Test
+    void whenLikeNotExistThen404() {
+        long likeId = 1L;
+
+        when(likeRepository.existsById(likeId)).thenReturn(false);
 
         ResponseStatusException exception =
-                assertThrows(ResponseStatusException.class, () -> likeService.addLike(postId, userId));
-        assertEquals("404 NOT_FOUND \"User 1 not found.\"", exception.getMessage());
+                assertThrows(ResponseStatusException.class, () -> likeService.removeLike(likeId));
+        assertEquals("404 NOT_FOUND \"Like 1 does not exist.\"", exception.getMessage());
     }
 
     @Test
     void countLikes() {
         long postId = 1L;
-        int count = 1;
+        long count = 1L;
         PostEntity postEntity = mock(PostEntity.class);
-        UserEntity userEntity = mock(UserEntity.class);
 
         when(postEntity.getId()).thenReturn(postId);
-        when(postEntity.getLikes()).thenReturn(Set.of(userEntity));
-        when(postRepository.findById(postId)).thenReturn(Optional.of(postEntity));
+        when(likeRepository.countByPostEntityId(postId)).thenReturn(count);
 
-        Integer result = likeService.countLikes(postId);
+        Long result = likeService.countLikes(postId);
         assertEquals(result, count);
     }
 }
