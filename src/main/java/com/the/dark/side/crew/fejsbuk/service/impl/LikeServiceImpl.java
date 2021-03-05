@@ -21,9 +21,13 @@ public class LikeServiceImpl implements LikeService {
     @Override
     public LikeDto addLike(LikeDto likeDto) {
         LikeEntity likeEntity = likeMapper.toEntity(likeDto);
-        if(likeRepository.existsByUserEntityAndPostEntity(likeEntity.getUserEntity(), likeEntity.getPostEntity())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Already liked.");
-        } else likeRepository.save(likeEntity);
+        long userId = likeEntity.getUserEntity().getId();
+        long postId = likeEntity.getPostEntity().getId();
+        if(likeRepository.existsByUserEntityIdAndPostEntityId(userId, postId)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Already liked.");
+        } else {
+            likeRepository.save(likeEntity);
+        }
         return likeMapper.toDto(likeEntity);
     }
 
@@ -31,7 +35,9 @@ public class LikeServiceImpl implements LikeService {
     public void removeLike(long likeId) {
         if(likeRepository.existsById(likeId)) {
             likeRepository.deleteById(likeId);
-        } else throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Like " + likeId + " does not exist.");
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Like " + likeId + " does not exist.");
+        }
     }
 
     @Override

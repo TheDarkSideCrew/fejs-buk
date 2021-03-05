@@ -23,6 +23,10 @@ import static org.mockito.Mockito.when;
 
 class LikeMapperTest {
 
+    long postId = 1L;
+    long userId = 2L;
+    long likeId = 3L;
+
     @InjectMocks
     private LikeMapper likeMapper;
 
@@ -43,9 +47,6 @@ class LikeMapperTest {
         PostEntity postEntity = mock(PostEntity.class);
         UserEntity userEntity = mock(UserEntity.class);
         LocalDateTime createdAt = LocalDateTime.now();
-        long likeId = 3L;
-        long postId = 1L;
-        long userId = 2L;
 
         when(likeEntity.getId()).thenReturn(likeId);
         when(likeEntity.getCreatedAt()).thenReturn(createdAt);
@@ -63,8 +64,6 @@ class LikeMapperTest {
 
     @Test
     void whenUserAndPostFoundThenReturnLike() {
-        long userId = 1L;
-        long postId = 2L;
         UserEntity userEntity = mock(UserEntity.class);
         PostEntity postEntity = mock(PostEntity.class);
         LikeDto likeDto = mock(LikeDto.class);
@@ -83,7 +82,6 @@ class LikeMapperTest {
 
     @Test
     void whenUserNotFoundThenReturn404() {
-        long userId = 2L;
         LikeDto likeDto = mock(LikeDto.class);
 
         when(likeDto.getUserId()).thenReturn(userId);
@@ -96,8 +94,6 @@ class LikeMapperTest {
 
     @Test
     void whenPostNotFoundThenReturn404() {
-        long postId = 2L;
-        long userId = 2L;
         UserEntity userEntity = mock(UserEntity.class);
         LikeDto likeDto = mock(LikeDto.class);
 
@@ -109,6 +105,6 @@ class LikeMapperTest {
 
         ResponseStatusException exception =
                 assertThrows(ResponseStatusException.class, () -> likeMapper.toEntity(likeDto));
-        assertEquals("404 NOT_FOUND \"Post 2 not found.\"", exception.getMessage());
+        assertEquals("404 NOT_FOUND \"Post 1 not found.\"", exception.getMessage());
     }
 }

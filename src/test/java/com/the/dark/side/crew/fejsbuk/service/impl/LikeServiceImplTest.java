@@ -19,6 +19,10 @@ import static org.mockito.Mockito.*;
 
 class LikeServiceImplTest {
 
+    long userId = 1L;
+    long postId = 2L;
+    long likeId = 3L;
+
     @InjectMocks
     private LikeServiceImpl likeService;
 
@@ -37,7 +41,14 @@ class LikeServiceImplTest {
     void shouldAddLike() {
         LikeDto likeDto = mock(LikeDto.class);
         LikeEntity likeEntity = mock(LikeEntity.class);
+        PostEntity postEntity = mock(PostEntity.class);
+        UserEntity userEntity = mock(UserEntity.class);
 
+        when(likeRepository.existsByUserEntityIdAndPostEntityId(userId, postId)).thenReturn(false);
+        when(likeEntity.getUserEntity()).thenReturn(userEntity);
+        when(likeEntity.getPostEntity()).thenReturn(postEntity);
+        when(likeEntity.getUserEntity().getId()).thenReturn(userId);
+        when(likeEntity.getPostEntity().getId()).thenReturn(postId);
         when(likeMapper.toEntity(likeDto)).thenReturn(likeEntity);
         when(likeMapper.toDto(likeEntity)).thenReturn(likeDto);
 
@@ -55,17 +66,18 @@ class LikeServiceImplTest {
 
         when(likeEntity.getUserEntity()).thenReturn(userEntity);
         when(likeEntity.getPostEntity()).thenReturn(postEntity);
+        when(likeEntity.getUserEntity().getId()).thenReturn(userId);
+        when(likeEntity.getPostEntity().getId()).thenReturn(postId);
         when(likeMapper.toEntity(likeDto)).thenReturn(likeEntity);
-        when(likeRepository.existsByUserEntityAndPostEntity(userEntity, postEntity)).thenReturn(true);
+        when(likeRepository.existsByUserEntityIdAndPostEntityId(userId, postId)).thenReturn(true);
 
         ResponseStatusException exception =
                 assertThrows(ResponseStatusException.class, () -> likeService.addLike(likeDto));
-        assertEquals("400 BAD_REQUEST \"Already liked.\"", exception.getMessage());
+        assertEquals("409 CONFLICT \"Already liked.\"", exception.getMessage());
     }
 
     @Test
     void shouldRemoveLike() {
-        long likeId = 1L;
         LikeEntity likeEntity = mock(LikeEntity.class);
 
         when(likeEntity.getId()).thenReturn(likeId);
@@ -77,18 +89,15 @@ class LikeServiceImplTest {
 
     @Test
     void whenLikeNotExistThen404() {
-        long likeId = 1L;
-
         when(likeRepository.existsById(likeId)).thenReturn(false);
 
         ResponseStatusException exception =
                 assertThrows(ResponseStatusException.class, () -> likeService.removeLike(likeId));
-        assertEquals("404 NOT_FOUND \"Like 1 does not exist.\"", exception.getMessage());
+        assertEquals("404 NOT_FOUND \"Like 3 does not exist.\"", exception.getMessage());
     }
 
     @Test
     void countLikes() {
-        long postId = 1L;
         long count = 1L;
         PostEntity postEntity = mock(PostEntity.class);
 
