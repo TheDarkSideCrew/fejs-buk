@@ -1,6 +1,9 @@
 package com.the.dark.side.crew.fejsbuk.auth.domain.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -9,6 +12,9 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Table(name = "users")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class UserEntity {
 
     @Id
