@@ -11,7 +11,7 @@ public interface AuthService {
 
     JwtResponse login(LoginRequest loginRequest, HttpServletResponse response);
 
-    UserDto addUser(UserDto userDto);
+    UserDto register(UserDto userDto);
 
     JwtResponse refresh(HttpServletRequest response);
 }

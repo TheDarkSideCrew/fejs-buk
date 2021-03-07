@@ -7,6 +7,7 @@ import com.the.dark.side.crew.fejsbuk.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,7 +24,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping(AUTH_LOGIN)
-    public ResponseEntity<JwtResponse> login(LoginRequest loginRequest, HttpServletResponse response) {
+    public ResponseEntity<JwtResponse> login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
         return ResponseEntity.ok(authService.login(loginRequest, response));
     }
 
@@ -33,7 +34,7 @@ public class AuthController {
     }
 
     @PostMapping(AUTH_REGISTER)
-    public ResponseEntity<UserDto> register(UserDto userDto) {
-        return ResponseEntity.ok(authService.addUser(userDto));
+    public ResponseEntity<UserDto> register(@RequestBody UserDto userDto) {
+        return ResponseEntity.ok(authService.register(userDto));
     }
 }
