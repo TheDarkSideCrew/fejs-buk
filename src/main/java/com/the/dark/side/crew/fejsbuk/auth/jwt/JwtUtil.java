@@ -36,7 +36,7 @@ public class JwtUtil {
                 .withIssuedAt(issuedAt)
                 .withExpiresAt(new Date(issuedAt.getTime() + getAccessTokenDurationMilliseconds()))
                 .sign(algorithm);
-        return JwtResponse.of(accessToken);
+        return new JwtResponse(accessToken);
     }
 
     public String getRefreshToken(String login) {

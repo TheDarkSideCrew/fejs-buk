@@ -8,8 +8,4 @@ import lombok.NoArgsConstructor;
 public class JwtResponse {
 
     private String tokenBearer;
-
-    public static JwtResponse of(String accessToken) {
-        return new JwtResponse(accessToken);
-    }
 }
