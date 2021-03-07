@@ -22,5 +22,6 @@ public class UserEntity {
     @Column(unique = true)
     private String login;
 
+    @Column(unique = true)
     private String email;
 }
