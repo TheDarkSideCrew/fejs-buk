@@ -19,6 +19,7 @@ public class UserEntity {
 
     private String lastName;
 
+    @Column(unique = true)
     private String login;
 
     private String email;
