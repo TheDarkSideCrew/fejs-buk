@@ -3,7 +3,7 @@ package com.the.dark.side.crew.fejsbuk.mapper;
 import com.the.dark.side.crew.fejsbuk.model.PostEntity;
 import com.the.dark.side.crew.fejsbuk.auth.domain.entity.UserEntity;
 import com.the.dark.side.crew.fejsbuk.model.dto.PostDto;
-import com.the.dark.side.crew.fejsbuk.repository.UserRepository;
+import com.the.dark.side.crew.fejsbuk.auth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

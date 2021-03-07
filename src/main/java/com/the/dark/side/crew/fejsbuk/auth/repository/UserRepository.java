@@ -1,4 +1,4 @@
-package com.the.dark.side.crew.fejsbuk.repository;
+package com.the.dark.side.crew.fejsbuk.auth.repository;
 
 import com.the.dark.side.crew.fejsbuk.auth.domain.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -5,7 +5,7 @@ import com.the.dark.side.crew.fejsbuk.model.PostEntity;
 import com.the.dark.side.crew.fejsbuk.auth.domain.entity.UserEntity;
 import com.the.dark.side.crew.fejsbuk.model.dto.CommentDto;
 import com.the.dark.side.crew.fejsbuk.repository.PostRepository;
-import com.the.dark.side.crew.fejsbuk.repository.UserRepository;
+import com.the.dark.side.crew.fejsbuk.auth.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
