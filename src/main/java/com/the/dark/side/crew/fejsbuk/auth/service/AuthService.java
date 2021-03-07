@@ -4,9 +4,11 @@ import com.the.dark.side.crew.fejsbuk.auth.domain.dto.JwtResponse;
 import com.the.dark.side.crew.fejsbuk.auth.domain.dto.LoginRequest;
 import com.the.dark.side.crew.fejsbuk.auth.domain.dto.UserDto;
 
+import javax.servlet.http.HttpServletResponse;
+
 public interface AuthService {
 
-    JwtResponse login(LoginRequest loginRequest);
+    JwtResponse login(LoginRequest loginRequest, HttpServletResponse response);
 
     UserDto addUser(UserDto userDto);
 }
