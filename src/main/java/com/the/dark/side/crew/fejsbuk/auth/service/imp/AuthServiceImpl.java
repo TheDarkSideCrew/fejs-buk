@@ -28,7 +28,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public UserDto addUser(UserDto userDto) {
         return Optional.of(userDto)
-                .filter(dto -> userRepository.existByLogin(dto.getLogin()))
+                .filter(dto -> userRepository.existsByLogin(dto.getLogin()))
                 .map(userMapper::toEntity)
                 .map(userRepository::save)
                 .map(userMapper::toDto)
