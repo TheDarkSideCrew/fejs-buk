@@ -2,7 +2,7 @@ package com.the.dark.side.crew.fejsbuk.mapper;
 
 import com.the.dark.side.crew.fejsbuk.model.CommentEntity;
 import com.the.dark.side.crew.fejsbuk.model.PostEntity;
-import com.the.dark.side.crew.fejsbuk.model.UserEntity;
+import com.the.dark.side.crew.fejsbuk.auth.domain.entity.UserEntity;
 import com.the.dark.side.crew.fejsbuk.model.dto.CommentDto;
 import com.the.dark.side.crew.fejsbuk.repository.PostRepository;
 import com.the.dark.side.crew.fejsbuk.repository.UserRepository;

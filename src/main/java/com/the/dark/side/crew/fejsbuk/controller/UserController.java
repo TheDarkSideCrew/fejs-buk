@@ -1,6 +1,6 @@
 package com.the.dark.side.crew.fejsbuk.controller;
 
-import com.the.dark.side.crew.fejsbuk.model.UserEntity;
+import com.the.dark.side.crew.fejsbuk.auth.domain.entity.UserEntity;
 import com.the.dark.side.crew.fejsbuk.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

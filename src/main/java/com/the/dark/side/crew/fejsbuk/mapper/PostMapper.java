@@ -1,7 +1,7 @@
 package com.the.dark.side.crew.fejsbuk.mapper;
 
 import com.the.dark.side.crew.fejsbuk.model.PostEntity;
-import com.the.dark.side.crew.fejsbuk.model.UserEntity;
+import com.the.dark.side.crew.fejsbuk.auth.domain.entity.UserEntity;
 import com.the.dark.side.crew.fejsbuk.model.dto.PostDto;
 import com.the.dark.side.crew.fejsbuk.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

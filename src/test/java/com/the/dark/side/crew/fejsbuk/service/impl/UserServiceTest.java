@@ -1,6 +1,6 @@
 package com.the.dark.side.crew.fejsbuk.service.impl;
 
-import com.the.dark.side.crew.fejsbuk.model.UserEntity;
+import com.the.dark.side.crew.fejsbuk.auth.domain.entity.UserEntity;
 import com.the.dark.side.crew.fejsbuk.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

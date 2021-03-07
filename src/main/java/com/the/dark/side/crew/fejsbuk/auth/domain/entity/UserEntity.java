@@ -1,4 +1,4 @@
-package com.the.dark.side.crew.fejsbuk.model;
+package com.the.dark.side.crew.fejsbuk.auth.domain.entity;
 
 import lombok.Getter;
 import lombok.Setter;
