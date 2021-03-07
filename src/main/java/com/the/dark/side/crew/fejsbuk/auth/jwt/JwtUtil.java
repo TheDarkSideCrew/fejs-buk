@@ -17,7 +17,7 @@ public class JwtUtil {
 
     public static final long SECONDS_TO_MILLISECONDS_MULTIPLIER = 1000;
 
-    private static Algorithm algorithm;
+    public static Algorithm JWT_ALGORITHM;
 
     @Value("${jwt.access.token.duration.seconds}")
     private long accessTokenDurationSeconds;
@@ -26,7 +26,7 @@ public class JwtUtil {
 
     @Value("${jwt.secret}")
     private void initAlgorithm(String secret) {
-        algorithm = Algorithm.HMAC256(secret);
+        JWT_ALGORITHM = Algorithm.HMAC256(secret);
     }
 
     public JwtResponse getAccessToken(String login) {
@@ -35,7 +35,7 @@ public class JwtUtil {
                 .withSubject(login)
                 .withIssuedAt(issuedAt)
                 .withExpiresAt(new Date(issuedAt.getTime() + getAccessTokenDurationMilliseconds()))
-                .sign(algorithm);
+                .sign(JWT_ALGORITHM);
         return new JwtResponse(accessToken);
     }
 
@@ -45,12 +45,12 @@ public class JwtUtil {
                 .withSubject(login)
                 .withIssuedAt(issuedAt)
                 .withExpiresAt(new Date(issuedAt.getTime() + getRefreshTokenDurationMilliseconds()))
-                .sign(algorithm);
+                .sign(JWT_ALGORITHM);
     }
 
     public JwtResponse getAccessTokenFromRefreshToken(String refreshToken) {
         try {
-            DecodedJWT decodedJWT = JWT.require(algorithm)
+            DecodedJWT decodedJWT = JWT.require(JWT_ALGORITHM)
                     .build()
                     .verify(refreshToken);
             return getAccessToken(decodedJWT.getSubject());
