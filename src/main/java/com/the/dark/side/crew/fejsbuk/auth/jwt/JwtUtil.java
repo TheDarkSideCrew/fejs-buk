@@ -2,10 +2,13 @@ package com.the.dark.side.crew.fejsbuk.auth.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.the.dark.side.crew.fejsbuk.auth.domain.dto.JwtResponse;
-import com.the.dark.side.crew.fejsbuk.auth.domain.dto.LoginRequest;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Date;
 
@@ -14,32 +17,46 @@ public class JwtUtil {
 
     public static final long SECONDS_TO_MILLISECONDS_MULTIPLIER = 1000;
 
-    @Value("{jwt.secret}")
-    private String secret;
+    private static Algorithm algorithm;
+
     @Value("{jwt.access.token.duration.seconds}")
     private long accessTokenDurationSeconds;
     @Value("{jwt.refresh.token.duration.seconds}")
     private long refreshTokenDurationSeconds;
 
-    public JwtResponse getAccessToken(LoginRequest request) {
-        Algorithm algorithm = Algorithm.HMAC256(secret);
+    @Value("{jwt.secret}")
+    private void initAlgorithm(String secret) {
+        algorithm = Algorithm.HMAC256(secret);
+    }
+
+    public JwtResponse getAccessToken(String login) {
         Date issuedAt = new Date();
         String accessToken = JWT.create()
-                .withSubject(request.getLogin())
+                .withSubject(login)
                 .withIssuedAt(issuedAt)
                 .withExpiresAt(new Date(issuedAt.getTime() + getAccessTokenDurationMilliseconds()))
                 .sign(algorithm);
         return JwtResponse.of(accessToken);
     }
 
-    public String getRefreshToken(LoginRequest request) {
-        Algorithm algorithm = Algorithm.HMAC256(secret);
+    public String getRefreshToken(String login) {
         Date issuedAt = new Date();
         return JWT.create()
-                .withSubject(request.getLogin())
+                .withSubject(login)
                 .withIssuedAt(issuedAt)
                 .withExpiresAt(new Date(issuedAt.getTime() + getRefreshTokenDurationMilliseconds()))
                 .sign(algorithm);
+    }
+
+    public JwtResponse getAccessTokenFromRefreshToken(String refreshToken) {
+        try {
+            DecodedJWT decodedJWT = JWT.require(algorithm)
+                    .build()
+                    .verify(refreshToken);
+            return getAccessToken(decodedJWT.getSubject());
+        } catch (JWTVerificationException exception) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Refresh token not valid");
+        }
     }
 
     private long getAccessTokenDurationMilliseconds() {
