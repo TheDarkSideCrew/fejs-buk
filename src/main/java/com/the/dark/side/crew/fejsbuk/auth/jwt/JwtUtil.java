@@ -19,12 +19,12 @@ public class JwtUtil {
 
     private static Algorithm algorithm;
 
-    @Value("{jwt.access.token.duration.seconds}")
+    @Value("${jwt.access.token.duration.seconds}")
     private long accessTokenDurationSeconds;
-    @Value("{jwt.refresh.token.duration.seconds}")
+    @Value("${jwt.refresh.token.duration.seconds}")
     private long refreshTokenDurationSeconds;
 
-    @Value("{jwt.secret}")
+    @Value("${jwt.secret}")
     private void initAlgorithm(String secret) {
         algorithm = Algorithm.HMAC256(secret);
     }
