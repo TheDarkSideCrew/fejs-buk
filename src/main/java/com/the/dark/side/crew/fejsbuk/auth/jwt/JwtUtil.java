@@ -5,6 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.the.dark.side.crew.fejsbuk.auth.domain.dto.JwtResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -13,9 +14,11 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.Date;
 
 @Component
+@Slf4j
 public class JwtUtil {
 
     public static final long SECONDS_TO_MILLISECONDS_MULTIPLIER = 1000;
+    public static final String REFRESH_TOKEN_TYPE = "refresh";
 
     public static Algorithm JWT_ALGORITHM;
 
@@ -42,6 +45,7 @@ public class JwtUtil {
     public String getRefreshToken(String login) {
         Date issuedAt = new Date();
         return JWT.create()
+                .withClaim("type", REFRESH_TOKEN_TYPE)
                 .withSubject(login)
                 .withIssuedAt(issuedAt)
                 .withExpiresAt(new Date(issuedAt.getTime() + getRefreshTokenDurationMilliseconds()))
@@ -53,10 +57,13 @@ public class JwtUtil {
             DecodedJWT decodedJWT = JWT.require(JWT_ALGORITHM)
                     .build()
                     .verify(refreshToken);
-            return getAccessToken(decodedJWT.getSubject());
+            if (REFRESH_TOKEN_TYPE.equals(decodedJWT.getClaim("type").asString())) {
+                return getAccessToken(decodedJWT.getSubject());
+            }
         } catch (JWTVerificationException exception) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Refresh token not valid");
+            log.debug("Refresh token not valid");
         }
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Refresh token not valid");
     }
 
     private long getAccessTokenDurationMilliseconds() {

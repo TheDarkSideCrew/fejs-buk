@@ -28,6 +28,8 @@ import static com.the.dark.side.crew.fejsbuk.commons.Requests.AUTH_REFRESH;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
+    public static final String REFRESH_TOKEN_COOKIE_NAME = "refreshToken";
+
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
@@ -45,6 +47,11 @@ public class AuthServiceImpl implements AuthService {
             throw new InvalidLoginOrPasswordException();
         }
         return jwtResponse;
+    }
+
+    @Override
+    public void logout(HttpServletResponse response) {
+        response.addCookie(new Cookie(REFRESH_TOKEN_COOKIE_NAME, ""));
     }
 
     @Override
@@ -68,7 +75,7 @@ public class AuthServiceImpl implements AuthService {
 
     private Cookie getRefreshTokenCookie(LoginRequest loginRequest) {
         String refreshToken = jwtUtil.getRefreshToken(loginRequest.getLogin());
-        Cookie cookie = new Cookie("refreshToken", refreshToken);
+        Cookie cookie = new Cookie(REFRESH_TOKEN_COOKIE_NAME, refreshToken);
         cookie.setHttpOnly(true);
         cookie.setPath(AUTH_REFRESH);
         // TODO set true in production when using HTTPS

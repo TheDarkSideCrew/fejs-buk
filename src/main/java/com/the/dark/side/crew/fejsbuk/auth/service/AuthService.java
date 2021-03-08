@@ -14,4 +14,6 @@ public interface AuthService {
     UserDto register(UserDto userDto);
 
     JwtResponse refresh(HttpServletRequest response);
+
+    void logout(HttpServletResponse response);
 }

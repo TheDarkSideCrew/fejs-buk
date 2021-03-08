@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import static com.the.dark.side.crew.fejsbuk.commons.Requests.AUTH_LOGIN;
+import static com.the.dark.side.crew.fejsbuk.commons.Requests.AUTH_LOGOUT;
 import static com.the.dark.side.crew.fejsbuk.commons.Requests.AUTH_REFRESH;
 import static com.the.dark.side.crew.fejsbuk.commons.Requests.AUTH_REGISTER;
 
@@ -26,6 +27,11 @@ public class AuthController {
     @PostMapping(AUTH_LOGIN)
     public ResponseEntity<JwtResponse> login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
         return ResponseEntity.ok(authService.login(loginRequest, response));
+    }
+
+    @PostMapping(AUTH_LOGOUT)
+    public void logout(HttpServletResponse response) {
+        authService.logout(response);
     }
 
     @PostMapping(AUTH_REFRESH)
