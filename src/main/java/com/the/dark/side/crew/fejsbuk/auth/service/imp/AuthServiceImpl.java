@@ -66,7 +66,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public JwtResponse refresh(HttpServletRequest request) {
-        Cookie refreshToken = WebUtils.getCookie(request, "refreshToken");
+        Cookie refreshToken = WebUtils.getCookie(request, REFRESH_TOKEN_COOKIE_NAME);
         return Optional.ofNullable(refreshToken)
                 .map(Cookie::getValue)
                 .map(jwtUtil::getAccessTokenFromRefreshToken)
