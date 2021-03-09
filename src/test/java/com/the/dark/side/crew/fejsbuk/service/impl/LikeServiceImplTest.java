@@ -83,7 +83,6 @@ class LikeServiceImplTest {
         when(likeEntity.getId()).thenReturn(likeId);
 
         likeRepository.deleteById(likeEntity.getId());
-
         verify(likeRepository).deleteById(likeId);
     }
 
