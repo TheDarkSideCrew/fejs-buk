@@ -1,6 +1,8 @@
 package com.the.dark.side.crew.fejsbuk.auth.config.filter;
 
 import com.auth0.jwt.JWT;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.the.dark.side.crew.fejsbuk.auth.domain.enums.TokenType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,6 +18,7 @@ import java.util.Collections;
 import java.util.Optional;
 
 import static com.the.dark.side.crew.fejsbuk.auth.jwt.JwtUtil.JWT_ALGORITHM;
+import static com.the.dark.side.crew.fejsbuk.auth.jwt.JwtUtil.TYPE;
 
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -36,11 +39,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private UsernamePasswordAuthenticationToken getUsernamePasswordAuthenticationToken(String jwt) {
         UsernamePasswordAuthenticationToken token = null;
         try {
-            String userLogin = JWT.require(JWT_ALGORITHM)
+            DecodedJWT decodedJWT = JWT.require(JWT_ALGORITHM)
                     .build()
-                    .verify(jwt)
-                    .getSubject();
-            token = new UsernamePasswordAuthenticationToken(userLogin, null, Collections.emptyList());
+                    .verify(jwt);
+            if (TokenType.ACCESS.name().equals(decodedJWT.getClaim(TYPE).asString())) {
+                String login = decodedJWT.getSubject();
+                token = new UsernamePasswordAuthenticationToken(login, null, Collections.emptyList());
+            }
         } catch (Exception exception) {
             log.debug("Invalid Access token.");
         }
