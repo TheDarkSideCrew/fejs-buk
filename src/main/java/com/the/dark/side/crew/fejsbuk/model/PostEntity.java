@@ -1,5 +1,6 @@
 package com.the.dark.side.crew.fejsbuk.model;
 
+import com.the.dark.side.crew.fejsbuk.auth.domain.entity.UserEntity;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
