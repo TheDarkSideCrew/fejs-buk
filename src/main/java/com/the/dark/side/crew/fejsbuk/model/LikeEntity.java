@@ -1,6 +1,5 @@
 package com.the.dark.side.crew.fejsbuk.model;
 
-import com.the.dark.side.crew.fejsbuk.auth.domain.entity.UserEntity;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -11,14 +10,12 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@Table(name = "posts")
-public class PostEntity {
+@Table(name = "likes")
+public class LikeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    private String message;
 
     @CreationTimestamp
     @Column(updatable = false)
@@ -26,4 +23,7 @@ public class PostEntity {
 
     @ManyToOne
     private UserEntity userEntity;
+
+    @ManyToOne
+    private PostEntity postEntity;
 }
