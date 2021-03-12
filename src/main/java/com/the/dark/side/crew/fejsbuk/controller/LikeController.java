@@ -3,7 +3,6 @@ package com.the.dark.side.crew.fejsbuk.controller;
 import com.the.dark.side.crew.fejsbuk.model.dto.LikeDto;
 import com.the.dark.side.crew.fejsbuk.service.LikeService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,9 +20,8 @@ public class LikeController {
     }
 
     @DeleteMapping
-    public ResponseEntity<Void> removeLike(@RequestParam long likeId) {
+    public void removeLike(@RequestParam long likeId) {
         likeService.removeLike(likeId);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping
